@@ -57,7 +57,7 @@
 %global ppc64le         ppc64le
 %global ppc64be         ppc64 ppc64p7
 %global multilib_arches %{power64} sparc64 x86_64
-%global jit_arches      %{ix86} x86_64 sparcv9 sparc64 %{aarch64} %{power64}
+%global jit_arches      %{ix86} x86_64 sparcv9 sparc64 %{aarch64} %{power64} %{arm}
 
 # With diabled nss is NSS deactivated, so in NSS_LIBDIR can be wrong path
 # the initialisation must be here. LAter the pkg-connfig have bugy behaviour
@@ -485,9 +485,7 @@ exit 0
 %{_jvmdir}/%{sdkdir %%1}/lib/libnio.so
 %{_jvmdir}/%{sdkdir %%1}/lib/libprefs.so
 %{_jvmdir}/%{sdkdir %%1}/lib/librmi.so
-%ifnarch %{arm}
 %{_jvmdir}/%{sdkdir %%1}/lib/libsaproc.so
-%endif
 %{_jvmdir}/%{sdkdir %%1}/lib/libsctp.so
 %{_jvmdir}/%{sdkdir %%1}/lib/libunpack.so
 %{_jvmdir}/%{sdkdir %%1}/lib/libverify.so
@@ -857,6 +855,9 @@ Patch300: jstack-pr1845.patch
 
 Patch400: ppc_stack_overflow_fix.patch 
 
+# Boot cycle JOBS patch
+Patch500: bootcycle_jobs.patch
+
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: alsa-lib-devel
@@ -1160,6 +1161,8 @@ sh %{SOURCE12}
 # Zero PPC fixes.
 #  TODO: propose them upstream
 %patch400
+
+%patch500
 
 # Extract systemtap tapsets
 %if %{with_systemtap}
